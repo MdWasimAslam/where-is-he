@@ -1,10 +1,33 @@
-// src/components/TrackingUI.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const TrackingUI = () => {
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const handleSuccess = (position) => {
+      const { latitude, longitude } = position.coords;
+      setLocation({ latitude, longitude });
+    };
+
+    const handleError = (error) => {
+      setError(error.message);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(handleSuccess, handleError, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      });
+    } else {
+      setError('Geolocation is not supported by this browser.');
+    }
+  }, []);
+
   return (
     <Box
       sx={{
@@ -21,7 +44,7 @@ const TrackingUI = () => {
       <IconButton
         sx={{ position: 'absolute', top: 16, right: 16, color: 'white' }}
       >
-        {/* <CloseIcon /> */}
+        <CloseIcon />
       </IconButton>
 
       <Typography variant="h6" sx={{ mb: 1 }}>
@@ -62,9 +85,12 @@ const TrackingUI = () => {
       </Box>
 
       <Typography variant="h5" sx={{ mb: 1 }}>
-        20 ft
+        {location.latitude ? `${location.latitude.toFixed(2)}° N` : 'Fetching...'}
       </Typography>
-      <Typography variant="body1">to your right</Typography>
+      <Typography variant="h5" sx={{ mb: 1 }}>
+        {location.longitude ? `${location.longitude.toFixed(2)}° E` : 'Fetching...'}
+      </Typography>
+      {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{error}</Typography>}
 
       <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
         Couldn't find it
