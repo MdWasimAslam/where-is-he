@@ -39,6 +39,7 @@ const TrackingUI = () => {
         bgcolor: '#0a0b1c',
         color: 'white',
         position: 'relative',
+        p: 2,
       }}
     >
       <IconButton
@@ -85,10 +86,10 @@ const TrackingUI = () => {
       </Box>
 
       <Typography variant="h5" sx={{ mb: 1 }}>
-        {location.latitude ? `${location.latitude.toFixed(2)}° N` : 'Fetching...'}
+        {location.latitude !== null ? `Latitude: ${location.latitude.toFixed(5)}` : 'Fetching...'}
       </Typography>
       <Typography variant="h5" sx={{ mb: 1 }}>
-        {location.longitude ? `${location.longitude.toFixed(2)}° E` : 'Fetching...'}
+        {location.longitude !== null ? `Longitude: ${location.longitude.toFixed(5)}` : 'Fetching...'}
       </Typography>
       {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{error}</Typography>}
 
