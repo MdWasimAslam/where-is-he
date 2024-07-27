@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import "./Styles/Login.css";
-
+import logo from "../Images/logo_white.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const Login = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
         height: '100vh',
         color: 'white',
         position: 'relative',
@@ -42,6 +41,7 @@ const Login = () => {
         {/* <CloseIcon /> */}
       </IconButton>
 
+      <img src={logo} alt="logo" className="logo-login" />
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
         Login
       </Typography>
