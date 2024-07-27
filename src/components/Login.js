@@ -3,6 +3,8 @@ import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import "./Styles/Login.css";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,11 +29,11 @@ const Login = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        bgcolor: '#0a0b1c',
         color: 'white',
         position: 'relative',
         padding: 2,
       }}
+      className="bg-color"
     >
       <IconButton
         sx={{ position: 'absolute', top: 16, right: 16, color: 'white' }}

@@ -1,0 +1,5 @@
+.bg-color{
+    background:linear-gradient(to bottom, rgb(10, 5, 28), rgb(30, 25, 58), rgb(20, 0, 30));
+    overflow-y: hidden;
+
+}
