@@ -6,7 +6,7 @@ import { useAuth } from './AuthContext';
 import "./Styles/Login.css";
 import logo from "../Images/logo_white.png";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [username, setUsername] = useState('');
@@ -22,8 +22,8 @@ const Login = () => {
   };
 
 
-  const SignUp = () => {
-    navigate('/signup');
+  const goToLogin = () => {
+    navigate('/login');
   }
 
 
@@ -59,16 +59,44 @@ const Login = () => {
 
       <div className={"loginContainer"}>
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb:2 }}>
-        Login
+        Sign Up
       </Typography>
       <Typography variant="p" sx={{ mb: 4 }}>
-        Welcome back! Please login to your account.
+        Create an account to get started
       </Typography>
        
 
       <TextField
         variant="outlined"
         label="Username"
+        fullWidth
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        sx={{
+          mb: 2,
+          input: { color: 'white' },
+          label: { color: 'grey' },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: 'white',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: 'white',
+            },
+          },
+        }}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+      />
+
+
+<TextField
+        variant="outlined"
+        label="Couple ID"
         fullWidth
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -122,9 +150,9 @@ const Login = () => {
         }}
       />
 
-      <Typography variant="p" sx={{ mb: 4 }}>
-        Forgot password?
-      </Typography>
+    
+
+      
 
       <Button
         variant="contained"
@@ -141,15 +169,15 @@ const Login = () => {
         }}
         onClick={handleLogin}
       >
-        Login
+        Sign Up
       </Button>
 
-      <Typography variant="p" sx={{ mt: 2 }} onClick={SignUp}>
-        <i>Don't have an account? Sign up </i>
+      <Typography variant="p" sx={{ mt: 2 }} onClick={goToLogin}>
+        <i>Already have an acocunt? Login </i>
       </Typography>
       </div>
-    </Box>  
+    </Box>
   );
 };
 
-export default Login;
+export default Signup;
