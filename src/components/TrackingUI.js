@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import GradientProgress from './GradientProgress';
 
 const TRACKING_UI = {
@@ -128,6 +128,10 @@ const TrackingUI = () => {
       <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
         Beta 1.0
       </Typography>
+      <Button onClick={()=>{
+        localStorage.removeItem('auth')
+        window.location.reload()
+      }}>LogOut</Button>
     </Box>
   );
 };
