@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { AuthProvider } from './components/AuthContext';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+// import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import TrackingUI from './components/TrackingUI';
 import './App.css';

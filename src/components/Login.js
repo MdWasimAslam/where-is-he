@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import "./Styles/Login.css";
@@ -20,6 +20,14 @@ const Login = () => {
       alert('Invalid credentials');
     }
   };
+
+
+  React.useEffect(() => {
+    if (localStorage.getItem('auth') === 'true') {
+      navigate('/home');
+    }
+  })
+  
 
   return (
     <Box
@@ -45,7 +53,7 @@ const Login = () => {
       
 
       <div className={"loginContainer"}>
-      <Typography variant="h3" sx={{ fontWeight: 'bold', mb:2 }}>
+      <Typography variant="h4" sx={{ fontWeight: 'bold', mb:2 }}>
         Login
       </Typography>
       <Typography variant="p" sx={{ mb: 4 }}>
@@ -121,6 +129,7 @@ const Login = () => {
         sx={{
           bgcolor: '#3f51b5',
           marginBottom: 2,
+          borderRadius: 15,
           '&:hover': {
             bgcolor: '#3f51b5',
           },
