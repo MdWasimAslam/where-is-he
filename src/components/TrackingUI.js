@@ -40,18 +40,26 @@ const TrackingUI = () => {
     };
 
     const handleError = (error) => {
-      setError(error.message);
+      if (error.code === error.PERMISSION_DENIED) {
+        setError('User denied the request for Geolocation. Please enable it in your device settings.');
+      } else {
+        setError(error.message);
+      }
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(handleSuccess, handleError, {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      });
-    } else {
-      setError('Geolocation is not supported by this browser.');
-    }
+    const requestGeolocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(handleSuccess, handleError, {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        });
+      } else {
+        setError('Geolocation is not supported by this browser.');
+      }
+    };
+
+    requestGeolocation();
   }, []);
 
   useEffect(() => {
@@ -81,8 +89,6 @@ const TrackingUI = () => {
         p: 2,
       }}
     >
-  
-
       <Typography variant="h6" sx={{ mb: 1 }}>
         Stay Connected, No Matter the Distance
       </Typography>
@@ -128,9 +134,9 @@ const TrackingUI = () => {
       <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
         Beta 1.0
       </Typography>
-      <Button onClick={()=>{
-        localStorage.removeItem('auth')
-        window.location.reload()
+      <Button onClick={() => {
+        localStorage.removeItem('auth');
+        window.location.reload();
       }}>LogOut</Button>
     </Box>
   );
