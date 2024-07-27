@@ -42,9 +42,16 @@ const Login = () => {
       </IconButton>
 
       <img src={logo} alt="logo" className="logo-login" />
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
+      
+
+      <div className={"loginContainer"}>
+      <Typography variant="h3" sx={{ fontWeight: 'bold', mb:2 }}>
         Login
       </Typography>
+      <Typography variant="p" sx={{ mb: 4 }}>
+        Welcome back! Please login to your account.
+      </Typography>
+       
 
       <TextField
         variant="outlined"
@@ -52,6 +59,35 @@ const Login = () => {
         fullWidth
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        sx={{
+          mb: 2,
+          input: { color: 'white' },
+          label: { color: 'grey' },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: 'white',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: 'white',
+            },
+          },
+        }}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+      />
+
+
+      <TextField
+        variant="outlined"
+        label="Password"
+        type="password"
+        fullWidth
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         sx={{
           mb: 2,
           input: { color: 'white' },
@@ -73,40 +109,18 @@ const Login = () => {
         }}
       />
 
-      <TextField
-        variant="outlined"
-        label="Password"
-        type="password"
-        fullWidth
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{
-          mb: 4,
-          input: { color: 'white' },
-          label: { color: 'white' },
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: 'white',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'white',
-            },
-          },
-        }}
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-      />
+      <Typography variant="p" sx={{ mb: 4 }}>
+        Forgot password?
+      </Typography>
 
       <Button
         variant="contained"
         color="primary"
         fullWidth
+        className="loginBtn"
         sx={{
           bgcolor: '#3f51b5',
+          marginBottom: 2,
           '&:hover': {
             bgcolor: '#3f51b5',
           },
@@ -115,6 +129,11 @@ const Login = () => {
       >
         Login
       </Button>
+
+      <Typography variant="p" sx={{ mt: 2 }}>
+        <i>Don't have an account? Sign up </i>
+      </Typography>
+      </div>
     </Box>
   );
 };

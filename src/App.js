@@ -6,6 +6,8 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import TrackingUI from './components/TrackingUI';
+import './App.css';
+
 
 const App = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
