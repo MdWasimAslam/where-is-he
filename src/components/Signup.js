@@ -39,11 +39,12 @@ const Signup = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'baseline',
         height: '100vh',
         color: 'white',
         position: 'relative',
         padding: 2,
+        marginLeft: 2,
       }}
       className="bg-color"
     >
