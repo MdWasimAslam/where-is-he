@@ -5,19 +5,27 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import "./Styles/Login.css";
 import logo from "../Images/logo_white.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [coupleId, setCoupleId] = useState('');
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === 'Wasim@slam1998') {
-      login();
-      navigate('/home');
+
+
+  const handleSignup = () => {
+
+    console.log(username, password, coupleId);
+    if (username.length>0  && password.length>0 && coupleId.length>0) {
+      signup({username: username, password: password, coupleId: coupleId});
     } else {
-      alert('Invalid credentials');
+      toast.error('Please fill all the fields');
     }
   };
 
@@ -35,7 +43,8 @@ const Signup = () => {
   
 
   return (
-    <Box
+    <>
+     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -99,8 +108,8 @@ const Signup = () => {
         variant="outlined"
         label="Couple ID"
         fullWidth
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={coupleId}
+        onChange={(e) => setCoupleId(e.target.value)}
         sx={{
           mb: 2,
           input: { color: 'white' },
@@ -168,7 +177,7 @@ const Signup = () => {
             bgcolor: '#3f51b5',
           },
         }}
-        onClick={handleLogin}
+        onClick={handleSignup}
       >
         Sign Up
       </Button>
@@ -177,7 +186,11 @@ const Signup = () => {
         <i>Already have an acocunt? Login </i>
       </Typography>
       </div>
+
     </Box>
+    <ToastContainer />
+    </>
+   
   );
 };
 

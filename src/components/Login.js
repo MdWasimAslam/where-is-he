@@ -6,19 +6,15 @@ import { useAuth } from './AuthContext';
 import "./Styles/Login.css";
 import logo from "../Images/logo_white.png";
 
+
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === 'Wasim@slam1998') {
-      login();
-      navigate('/home');
-    } else {
-      alert('Invalid credentials');
-    }
+  const handleLogin = async() => {
+      await login({username: username, password: password});    
   };
 
 
