@@ -3,7 +3,7 @@ import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import config from './Config';
 
 
 const AuthContext = createContext();
@@ -11,11 +11,10 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(localStorage.getItem('auth') === 'true');
   
-  const apiLink = 'http://localhost:8080/users';
 
   const login = async (payload) => {
     try {
-      const response = await axios.post(`${apiLink}/login`, payload);
+      const response = await axios.post(`${config.api}/users/login`, payload);
       if (response.status === 200) {
         setAuth(true);
         localStorage.setItem('auth', 'true');
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (payload) => {
     try {
-      const response = await axios.post(`${apiLink}/register`, payload);
+      const response = await axios.post(`${config.api}/users//register`, payload);
       if (response.status === 200) {
        toast.success('User created successfully');
       } else {
