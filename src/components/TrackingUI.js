@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Button, Typography, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, CircularProgress, Avatar } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import { useAuth } from './AuthContext';
 import config from './Config';
 import { keyframes } from '@mui/system';
-
+import BottomNavbar from './BottomNavbar';
+import Topbar from './Topbar.js';
 // Define the keyframes for the pulsing animation
 const pulse = keyframes`
   0% {
@@ -19,22 +20,22 @@ const pulse = keyframes`
   }
 `;
 
-const AnimatedHeart = () => {
+const AnimatedHeart = ({ distance }) => {
+  // Calculate animation duration based on distance
+  const animationDuration = distance !== null ? Math.max(0.5, Math.min(3, distance / 10)) : 1;
+
   return (
     <Typography
       variant="h2"
       sx={{
         display: 'inline-block',
-        animation: `${pulse} 1s infinite`,
+        animation: `${pulse} ${animationDuration}s infinite`,
       }}
     >
       ❤️
     </Typography>
   );
 };
-
-
-
 
 const TrackingUI = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
@@ -47,7 +48,6 @@ const TrackingUI = () => {
     const handleSuccess = (position) => {
       const { latitude, longitude } = position.coords;
       setLocation({ latitude, longitude });
-      
     };
 
     const handleError = (error) => {
@@ -91,129 +91,128 @@ const TrackingUI = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const updateLocationAndDistance = () => {
+      if (location.latitude && location.longitude) {
+        updateUserLocation();
+        getDistance();
+      }
+    };
+
+    // Run the function immediately
+    updateLocationAndDistance();
+
+    // Set up the interval
+    const intervalId = setInterval(updateLocationAndDistance, 10000);
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [location]);
+
+  const updateUserLocation = async () => {
+    try {
+      const response = await axios.post(`${config.api}/geo/locationUpdate`, {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        userId: localStorage.getItem('userId'),
+        coupleId: localStorage.getItem('coupleId'),
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getDistance = async () => {
+    try {
+      const response = await axios.post(`${config.api}/geo/distance`, {
+        coupleId: localStorage.getItem('coupleId'),
+      });
+
+      setDistance(response.data.readableDistance);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
   };
 
-
-  // Write a function that will be called every 10 seconds 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      updateUserLocation();
-    }, 5000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [location]);
-
-
-  useEffect(() => {
-    // Run the function immediately
-    getDistance();
-
-    // Set up the interval
-    const intervalId = setInterval(() => {
-      getDistance();
-    }, 10000);
-
-    // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
-
-const updateUserLocation = async () => {
-  try {
-    const response = await axios.post(`${config.api}/geo/locationUpdate`, {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      userId: localStorage.getItem('userId'),
-      coupleId: localStorage.getItem('coupleId'),
-    });
-
-    console.log(response.data);
-    
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
-const getDistance = async () => {
-  try {
-    const response = await axios.post(`${config.api}/geo/distance`, {
-     
-        coupleId: localStorage.getItem('coupleId'),
-      
-    });
-
-    // console.log(response);
-    setDistance(response.data.readableDistance);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
         height: '100vh',
         bgcolor: '#0a0b1c',
         color: 'white',
         position: 'relative',
-        p: 2,
       }}
     >
-      {loading ? (
-        <CircularProgress color="inherit" />
-      ) : (
-        <>
-          <Typography variant="h6" sx={{ mb: 1 }}>
-            Stay Connected, No Matter the Distance
-          </Typography>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
-            Where Is He?
-          </Typography>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+      }}>
+        <h4 style={{marginLeft:"25px"}}>Hello Wasim</h4>
+        <Avatar style={{marginRight:"25px"}}  />
 
-          <Box
-            sx={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mb: 2,
-            }}
-          >
-            <GradientProgress />
+      </div>
+
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 'calc(100vh - 64px)', // Adjust height to account for the Topbar
+          p: 2,
+        }}
+      >
+        {loading ? (
+          <CircularProgress color="inherit" />
+        ) : (
+          <>
             <Box
               sx={{
-                position: 'absolute',
+                position: 'relative',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
+                mb: 2,
               }}
             >
-             
-              <AnimatedHeart />
+              <GradientProgress />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <AnimatedHeart distance={distance} />
+              </Box>
             </Box>
-          </Box>
 
-         
-          <Typography variant="h5" sx={{ mb: 1,mt:2 }}>
-            {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'}
+            <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+              <div style={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}} >
+                <div>{distance !== null ? `${distance} km` : 'Calculating Distance...'}</div>
+                <div style={{fontSize:'15px',color:'grey',marginTop:'10px'}}>from your partner</div>
+              </div>
+            </Typography>
 
-          </Typography>
-          {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{error}</Typography>}
+            {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{window.location.reload()}</Typography>}
 
-          <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
-            Beta 1.0
-          </Typography>
-          <Button onClick={handleLogout}>LogOut</Button>
-        </>
-      )}
+            <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
+              Beta 1.0
+            </Typography>
+            <Button onClick={handleLogout}>LogOut</Button>
+          </>
+        )}
+        <BottomNavbar />
+      </Box>
     </Box>
   );
 };

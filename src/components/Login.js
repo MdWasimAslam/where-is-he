@@ -44,12 +44,7 @@ const Login = () => {
       }}
       className="bg-color"
     >
-      <IconButton
-        sx={{ position: 'absolute', top: 16, right: 16, color: 'white' }}
-        onClick={() => navigate('/')}
-      >
-        {/* <CloseIcon /> */}
-      </IconButton>
+      
 
       <img src={logo} alt="logo" className="logo-login" />
       
@@ -119,9 +114,9 @@ const Login = () => {
         }}
       />
 
-      <Typography variant="p" sx={{ mb: 4 }}>
+      {/* <Typography variant="p" sx={{ mb: 4 }}>
         Forgot password?
-      </Typography>
+      </Typography> */}
 
       <Button
         variant="contained"
@@ -132,6 +127,7 @@ const Login = () => {
           bgcolor: '#3f51b5',
           marginBottom: 2,
           borderRadius: 15,
+          marginTop: 2,
           '&:hover': {
             bgcolor: '#3f51b5',
           },
@@ -141,9 +137,9 @@ const Login = () => {
         Login
       </Button>
 
-      <Typography variant="p" sx={{ mt: 2 }} onClick={SignUp}>
+      {/* <Typography variant="p" sx={{ mt: 2 }} onClick={SignUp}>
         <i>Don't have an account? Sign up </i>
-      </Typography>
+      </Typography> */}
       </div>
     </Box>  
   );

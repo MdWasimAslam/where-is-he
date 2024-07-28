@@ -7,7 +7,6 @@ import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import TrackingUI from './components/TrackingUI';
 import './App.css';
-import Signup from './components/Signup';
 
 
 const App = () => {
@@ -21,7 +20,6 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<ProtectedRoute element={TrackingUI} />} />
             <Route path="/" element={<Login />} /> {/* Optional default route */}
-            <Route path="/signup" element={<Signup />} />
           </Routes>
         ) : (
           <div
