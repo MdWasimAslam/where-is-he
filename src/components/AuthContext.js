@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', response.data.token);
       } else {
         setAuth(false);
+        toast.error('Invalid credentials');
       }
     } catch (error) {
       console.error('Login error:', error);
