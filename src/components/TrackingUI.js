@@ -1,33 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Box, Button, Typography, CircularProgress } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import { useAuth } from './AuthContext';
+import config from './Config';
 
-const TRACKING_UI = {
-  destination: { latitude: 22.54321104358877, longitude: 88.35155530898258 },
-};
 
-const haversineDistance = (coords1, coords2) => {
-  const toRad = (value) => (value * Math.PI) / 180;
 
-  const R = 6371; // Earth radius in kilometers
-  const dLat = toRad(coords2.latitude - coords1.latitude);
-  const dLon = toRad(coords2.longitude - coords1.longitude);
-  const lat1 = toRad(coords1.latitude);
-  const lat2 = toRad(coords2.latitude);
+// const TRACKING_UI = {
+//   destination: { latitude: 22.54321104358877, longitude: 88.35155530898258 },
+// };
 
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-};
 
 const TrackingUI = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
-  const [distance, setDistance] = useState(null);
+  // const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
   const { logout } = useAuth();
 
@@ -35,11 +23,7 @@ const TrackingUI = () => {
     const handleSuccess = (position) => {
       const { latitude, longitude } = position.coords;
       setLocation({ latitude, longitude });
-      const dist = haversineDistance(
-        { latitude, longitude },
-        TRACKING_UI.destination
-      );
-      setDistance(dist.toFixed(1));
+      
     };
 
     const handleError = (error) => {
@@ -86,6 +70,37 @@ const TrackingUI = () => {
   const handleLogout = async () => {
     await logout();
   };
+
+
+  // Write a function that will be called every 10 seconds 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log('Fetching Distance');
+      console.log(location.latitude,'Latitude');
+      console.log(location.longitude,'Longitude');
+      updateUserLocation();
+    }, 10000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [location]);
+
+const updateUserLocation = async () => {
+  try {
+    const response = await axios.post(`${config.api}/geo/locationUpdate`, {
+      latitude: location.latitude,
+      longitude: location.longitude,
+      userId: localStorage.getItem('userId'),
+      coupleId: localStorage.getItem('coupleId'),
+    });
+
+    console.log(response);
+    
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <Box
@@ -143,7 +158,7 @@ const TrackingUI = () => {
             {location.longitude !== null ? `Longitude: ${location.longitude.toFixed(5)}` : 'Fetching...'}
           </Typography>
           <Typography variant="h5" sx={{ mb: 1 }}>
-            {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'}
+            {/* {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'} */}
           </Typography>
           {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{error}</Typography>}
 

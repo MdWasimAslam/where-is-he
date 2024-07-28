@@ -17,8 +17,12 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${config.api}/users/login`, payload);
       if (response.status === 200) {
         setAuth(true);
+        console.log(response.data);
         localStorage.setItem('auth', 'true');
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('coupleId', response.data.coupleId);
       } else {
         setAuth(false);
         toast.error('Invalid credentials');
@@ -31,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (payload) => {
     try {
-      const response = await axios.post(`${config.api}/users//register`, payload);
+      const response = await axios.post(`${config.api}/users/register`, payload);
       if (response.status === 200) {
        toast.success('User created successfully');
       } else {
@@ -44,8 +48,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setAuth(false);
-    localStorage.removeItem('auth');
-    localStorage.removeItem('token');
+    localStorage.clear();
   };
 
   useEffect(() => {
