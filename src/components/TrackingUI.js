@@ -4,12 +4,36 @@ import { Box, Button, Typography, CircularProgress } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import { useAuth } from './AuthContext';
 import config from './Config';
+import { keyframes } from '@mui/system';
+
+// Define the keyframes for the pulsing animation
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const AnimatedHeart = () => {
+  return (
+    <Typography
+      variant="h2"
+      sx={{
+        display: 'inline-block',
+        animation: `${pulse} 1s infinite`,
+      }}
+    >
+      ❤️
+    </Typography>
+  );
+};
 
 
-
-// const TRACKING_UI = {
-//   destination: { latitude: 22.54321104358877, longitude: 88.35155530898258 },
-// };
 
 
 const TrackingUI = () => {
@@ -75,16 +99,26 @@ const TrackingUI = () => {
   // Write a function that will be called every 10 seconds 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // console.log('Fetching Distance');
-      // console.log(location.latitude,'Latitude');
-      // console.log(location.longitude,'Longitude');
       updateUserLocation();
-      getDistance()
     }, 5000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
   }, [location]);
+
+
+  useEffect(() => {
+    // Run the function immediately
+    getDistance();
+
+    // Set up the interval
+    const intervalId = setInterval(() => {
+      getDistance();
+    }, 10000);
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
 const updateUserLocation = async () => {
   try {
@@ -162,18 +196,12 @@ const getDistance = async () => {
                 alignItems: 'center',
               }}
             >
-              <Typography variant="h2" sx={{ transform: 'rotate(45deg)' }}>
-                ➔
-              </Typography>
+             
+              <AnimatedHeart />
             </Box>
           </Box>
 
-          {/* <Typography variant="h5" sx={{ mb: 1 }}>
-            {location.latitude !== null ? `Latitude: ${location.latitude.toFixed(5)}` : 'Fetching...'}
-          </Typography>
-          <Typography variant="h5" sx={{ mb: 1 }}>
-            {location.longitude !== null ? `Longitude: ${location.longitude.toFixed(5)}` : 'Fetching...'}
-          </Typography> */}
+         
           <Typography variant="h5" sx={{ mb: 1,mt:2 }}>
             {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'}
 
