@@ -15,7 +15,7 @@ import config from './Config';
 const TrackingUI = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
-  // const [distance, setDistance] = useState(null);
+  const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
   const { logout } = useAuth();
 
@@ -75,12 +75,12 @@ const TrackingUI = () => {
   // Write a function that will be called every 10 seconds 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      console.log('Fetching Distance');
-      console.log(location.latitude,'Latitude');
-      console.log(location.longitude,'Longitude');
+      // console.log('Fetching Distance');
+      // console.log(location.latitude,'Latitude');
+      // console.log(location.longitude,'Longitude');
       updateUserLocation();
       getDistance()
-    }, 10000);
+    }, 5000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
@@ -95,7 +95,7 @@ const updateUserLocation = async () => {
       coupleId: localStorage.getItem('coupleId'),
     });
 
-    console.log(response);
+    console.log(response.data);
     
   } catch (error) {
     console.error(error);
@@ -111,8 +111,8 @@ const getDistance = async () => {
       
     });
 
-    console.log(response);
-    // setDistance(response.data.distance);
+    // console.log(response);
+    setDistance(response.data.readableDistance);
   } catch (error) {
     console.error(error);
   }
@@ -168,14 +168,15 @@ const getDistance = async () => {
             </Box>
           </Box>
 
-          <Typography variant="h5" sx={{ mb: 1 }}>
+          {/* <Typography variant="h5" sx={{ mb: 1 }}>
             {location.latitude !== null ? `Latitude: ${location.latitude.toFixed(5)}` : 'Fetching...'}
           </Typography>
           <Typography variant="h5" sx={{ mb: 1 }}>
             {location.longitude !== null ? `Longitude: ${location.longitude.toFixed(5)}` : 'Fetching...'}
-          </Typography>
-          <Typography variant="h5" sx={{ mb: 1 }}>
-            {/* {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'} */}
+          </Typography> */}
+          <Typography variant="h5" sx={{ mb: 1,mt:2 }}>
+            {distance !== null ? `Distance: ${distance} km` : 'Calculating Distance...'}
+
           </Typography>
           {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{error}</Typography>}
 
