@@ -79,6 +79,7 @@ const TrackingUI = () => {
       console.log(location.latitude,'Latitude');
       console.log(location.longitude,'Longitude');
       updateUserLocation();
+      getDistance()
     }, 10000);
 
     // Cleanup interval on component unmount
@@ -96,6 +97,22 @@ const updateUserLocation = async () => {
 
     console.log(response);
     
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+const getDistance = async () => {
+  try {
+    const response = await axios.post(`${config.api}/geo/distance`, {
+     
+        coupleId: localStorage.getItem('coupleId'),
+      
+    });
+
+    console.log(response);
+    // setDistance(response.data.distance);
   } catch (error) {
     console.error(error);
   }
