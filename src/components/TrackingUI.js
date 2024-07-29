@@ -79,36 +79,25 @@ const TrackingUI = () => {
 
   const updateUserLocation = useCallback(async () => {
     try {
-      const response = await axios.post(`${config.api}/geo/locationUpdate`, {
+      const response = await axios.post(`${config.api}/location/update`, {
         latitude: location.latitude,
         longitude: location.longitude,
         userId: localStorage.getItem('userId'),
         coupleId: localStorage.getItem('coupleId'),
       });
 
-      console.log(response.data);
+      if (response.data && response.data.distance) {
+        setDistance(response.data.distance);
+      }
     } catch (error) {
       console.error(error);
     }
   }, [location.latitude, location.longitude]);
 
-  const getDistance = useCallback(async () => {
-    try {
-      const response = await axios.post(`${config.api}/geo/distance`, {
-        coupleId: localStorage.getItem('coupleId'),
-      });
-
-      setDistance(response.data.readableDistance);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
   useEffect(() => {
     const updateLocationAndDistance = () => {
       if (location.latitude && location.longitude) {
         updateUserLocation();
-        getDistance();
       }
     };
 
@@ -116,7 +105,7 @@ const TrackingUI = () => {
     const intervalId = setInterval(updateLocationAndDistance, 10000);
 
     return () => clearInterval(intervalId);
-  }, [location, updateUserLocation, getDistance]);
+  }, [location, updateUserLocation]);
 
   const handleNavChange = (newValue) => {
     setSelectedNav(newValue);
