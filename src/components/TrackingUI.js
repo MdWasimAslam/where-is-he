@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Box, Typography, CircularProgress, Avatar, AppBar, Toolbar } from '@mui/material';
+import { Box, Typography, CircularProgress, Avatar, AppBar, Toolbar, Button } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import config from './Config';
 import BottomNavbar from './BottomNavbar';
 import profileImage1 from '../Images/ProfileImg1.jpeg';
 import profileImage2 from '../Images/ProfileImg2.jpg';
 import "./Styles/TrackingUi.css";
+import Wishlist from './Wishlist';
 
 
 
@@ -191,7 +192,7 @@ const TrackingUI = () => {
                 {error && (
                   <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
                     {error}
-                    {window.location.reload()}
+                    <Button onClick={()=>{window.location.reload()}}>Reload</Button>
                   </Typography>
                 )}
 
@@ -218,9 +219,10 @@ const TrackingUI = () => {
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+              {/* <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
                 Coming Soon 1...
-              </Typography>
+              </Typography> */}
+              <Wishlist />
             </Box>
           ) : selectedNav === 2 ? (
             <Box
