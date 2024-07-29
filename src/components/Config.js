@@ -1,5 +1,5 @@
 const config = {
-    api: "sheez-backend-server.vercel.app"
+    api: "https://sheez-backend-server.vercel.app"
   };
   
   export default config;

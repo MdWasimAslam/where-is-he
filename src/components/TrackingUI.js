@@ -61,7 +61,7 @@ const TrackingUI = () => {
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition(handleSuccess, handleError, {
           enableHighAccuracy: true,
-          timeout: 25000,
+          timeout: 10000, // 10 seconds
           maximumAge: 0,
         });
       } else {
@@ -73,16 +73,16 @@ const TrackingUI = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate loading for 1 second
     return () => clearTimeout(timer);
   }, []);
 
   const updateUserLocation = useCallback(async () => {
     try {
       const response = await axios.post(`${config.api}/location/update`, {
-        latitude: location.latitude,
-        longitude: location.longitude,
-        userId: localStorage.getItem('userId'),
+        latitude: location.latitude.toString(),
+        longitude: location.longitude.toString(),
+        user_Id: localStorage.getItem('userId'),
         coupleId: localStorage.getItem('coupleId'),
       });
 
@@ -101,8 +101,9 @@ const TrackingUI = () => {
       }
     };
 
+    // Call immediately, then set up interval
     updateLocationAndDistance();
-    const intervalId = setInterval(updateLocationAndDistance, 10000);
+    const intervalId = setInterval(updateLocationAndDistance, 25000); // 25 seconds
 
     return () => clearInterval(intervalId);
   }, [location, updateUserLocation]);
