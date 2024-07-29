@@ -3,38 +3,14 @@ import axios from 'axios';
 import { Box, Typography, CircularProgress, Avatar, AppBar, Toolbar } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import config from './Config';
-import { keyframes } from '@mui/system';
 import BottomNavbar from './BottomNavbar';
 import profileImage1 from '../Images/ProfileImg1.jpeg';
 import profileImage2 from '../Images/ProfileImg2.jpg';
+import "./Styles/TrackingUi.css";
 
-const pulse = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
 
-const AnimatedHeart = ({ distance }) => {
-  const animationDuration = distance !== null ? Math.max(0.5, Math.min(3, distance / 10)) : 1;
 
-  return (
-    <Typography
-      variant="h2"
-      sx={{
-        display: 'inline-block',
-        animation: `${pulse} ${animationDuration}s infinite`,
-      }}
-    >
-      ❤️
-    </Typography>
-  );
-};
+
 
 const formatTimeDifference = (lastUpdated) => {
   const now = new Date();
@@ -201,7 +177,7 @@ const TrackingUI = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <AnimatedHeart distance={distance} />
+                    <div class="heart-loader"></div>
                   </Box>
                 </Box>
 
