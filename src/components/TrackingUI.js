@@ -132,10 +132,12 @@ const TrackingUI = () => {
         color: 'white',
       }}
     >
+      {/* Topbar */}
+      
       <AppBar position="static" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
-        <Toolbar sx={{ justifyContent: 'space-between', minHeight: '80px', padding: '5px 25px' }}>
+        <Toolbar sx={{ justifyContent: 'space-between', minHeight: '75px', padding: '5px 25px' }}>
           <Typography variant="h5" style={{ fontFamily: 'poppins' }}>
-            Hello {localStorage.getItem('username') === 'wasi' ? <>Wasi</> : <>Sheezu</>}
+            Hi, {localStorage.getItem('username') === 'wasi' ? <>Wasi</> : <>Sheeza</>}
           </Typography>
           {localStorage.getItem('username') === 'wasi' ? (
             <Avatar alt="Wasi" src={profileImage2} style={{ border: "1px solid white" }} />
@@ -145,118 +147,118 @@ const TrackingUI = () => {
         </Toolbar>
       </AppBar>
 
-     {
-      selectedNav === 0 ? (
-        <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
-          textAlign: 'center',
-        }}
-      >
-        {loading ? (
-          <CircularProgress color="inherit" />
-        ) : (
-          <>
+      {
+        selectedNav === 0 ? (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2,
+              textAlign: 'center',
+            }}
+          >
+            {loading ? (
+              <CircularProgress color="inherit" />
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2,
+                  }}
+                >
+                  <GradientProgress />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <AnimatedHeart distance={distance} />
+                  </Box>
+                </Box>
+
+                <Typography variant="h5" sx={{ mb: 0, mt: 2 }}>
+                  {distance !== null ? `${distance} km` : 'Calculating Distance...'}
+                </Typography>
+                <Typography variant="body2" sx={{ fontSize: '15px', color: 'grey', mt: 1 }}>
+                  from your partner
+                </Typography>
+
+                {error && (
+                  <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
+                    {error}
+                  </Typography>
+                )}
+
+                <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
+                  Loving you is like breathing; I can’t stop, and I don’t want to.
+                </Typography>
+              </>
+            )}
+          </Box>) : selectedNav === 1 ? (
             <Box
               sx={{
-                position: 'relative',
+                flex: 1,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mb: 2,
+                p: 2,
+                textAlign: 'center',
               }}
             >
-              <GradientProgress />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <AnimatedHeart distance={distance} />
-              </Box>
+              <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+                Coming Soon 1...
+              </Typography>
+            </Box>
+          ) : selectedNav === 2 ? (
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                p: 2,
+                textAlign: 'center',
+              }}
+
+            >
+              <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+                Coming Soon 2...
+              </Typography>
             </Box>
 
+          ) : (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2,
+              textAlign: 'center',
+            }}
+
+
+          >
             <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-              {distance !== null ? `${distance} km` : 'Calculating Distance...'}
+              Coming Soon...
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: '15px', color: 'grey', mt: 1 }}>
-              from your partner
-            </Typography>
+          </Box>
+        )
+      }
 
-            {error && (
-              <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
-                {error}
-              </Typography>
-            )}
-
-            <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
-              Loving you is like breathing; I can’t stop, and I don’t want to.
-            </Typography>
-          </>
-        )}
-      </Box>) : selectedNav === 1 ? (
-        <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
-          textAlign: 'center',
-        }}
-      >
-        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-          Coming Soon 1...
-        </Typography>
-      </Box>
-      ) : selectedNav === 2 ? (
-        <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
-          textAlign: 'center',
-        }}
-
-      >
-        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-          Coming Soon 2...
-        </Typography>
-      </Box>
-
-      ) : (
-        <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
-          textAlign: 'center',
-        }}
-
-
-      >
-        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-          Coming Soon...
-        </Typography>
-      </Box>
-      )
-     }
-        
       <BottomNavbar selectedNav={selectedNav} onNavChange={handleNavChange} />
     </Box>
   );

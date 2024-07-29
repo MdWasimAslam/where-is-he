@@ -6,6 +6,17 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useAuth } from './AuthContext';
 import { Logout } from '@mui/icons-material';
 
+// Reusable styles for BottomNavigationAction
+const actionStyles = {
+  color: 'grey',
+  justifyContent: 'unset', // Center the icon
+  marginTop: '10px', // Increase top margin
+  '&.Mui-selected': {
+    color: 'white', // Highlight color for the selected item
+    justifyContent: 'unset', // Center the icon
+  },
+};
+
 const BottomNavbar = ({ selectedNav, onNavChange }) => {
   const { logout } = useAuth();
 
@@ -24,9 +35,9 @@ const BottomNavbar = ({ selectedNav, onNavChange }) => {
         position: 'fixed',
         bottom: 0,
         width: '100%',
-        height: 60, // Increased height
+        height: 80, // Increased height
         bgcolor: 'transparent', // Make background transparent for gradient
-        background: 'linear-gradient(180deg, rgba(10,11,28,1) 0%, rgba(0,0,0,1) 100%)', // Gradient background
+        background: 'black', // Gradient background
         boxShadow: '0 -2px 10px rgb(0 0 0 / 69%)',
         '& .Mui-selected': {
           color: '#F15F79', // Highlight color for the selected item
@@ -35,39 +46,19 @@ const BottomNavbar = ({ selectedNav, onNavChange }) => {
     >
       <BottomNavigationAction
         icon={<LocationOnIcon sx={{ fontSize: 30 }} />} // Increase icon size here
-        sx={{
-          color: 'white',
-          '&.Mui-selected': {
-            color: '#F15F79', // Highlight color for the selected item
-          },
-        }}
+        sx={actionStyles}
       />
       <BottomNavigationAction
         icon={<RestoreIcon sx={{ fontSize: 30 }} />} // Increase icon size here
-        sx={{
-          color: 'white',
-          '&.Mui-selected': {
-            color: '#F15F79', // Highlight color for the selected item
-          },
-        }}
+        sx={actionStyles}
       />
       <BottomNavigationAction
         icon={<FavoriteIcon sx={{ fontSize: 30 }} />} // Increase icon size here
-        sx={{
-          color: 'white',
-          '&.Mui-selected': {
-            color: '#F15F79', // Highlight color for the selected item
-          },
-        }}
+        sx={actionStyles}
       />
       <BottomNavigationAction
         icon={<Logout sx={{ fontSize: 30 }} />} // Increase icon size here
-        sx={{
-          color: 'white',
-          '&.Mui-selected': {
-            color: '#F15F79', // Highlight color for the selected item
-          },
-        }}
+        sx={actionStyles}
         onClick={handleLogout}
       />
     </BottomNavigation>
