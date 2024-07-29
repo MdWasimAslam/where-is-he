@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Button, Typography, CircularProgress, Avatar } from '@mui/material';
+import { Box, Button, Typography, CircularProgress, Avatar, AppBar, Toolbar } from '@mui/material';
 import GradientProgress from './GradientProgress';
 import { useAuth } from './AuthContext';
 import config from './Config';
 import { keyframes } from '@mui/system';
 import BottomNavbar from './BottomNavbar';
-import Topbar from './Topbar.js';
-// Define the keyframes for the pulsing animation
+
 const pulse = keyframes`
   0% {
     transform: scale(1);
@@ -21,7 +20,6 @@ const pulse = keyframes`
 `;
 
 const AnimatedHeart = ({ distance }) => {
-  // Calculate animation duration based on distance
   const animationDuration = distance !== null ? Math.max(0.5, Math.min(3, distance / 10)) : 1;
 
   return (
@@ -74,19 +72,6 @@ const TrackingUI = () => {
   }, []);
 
   useEffect(() => {
-    const handleOrientation = (event) => {
-      // Handle device orientation here
-      // For example: Use event.alpha, event.beta, and event.gamma to adjust arrow direction
-    };
-
-    window.addEventListener('deviceorientation', handleOrientation);
-
-    return () => {
-      window.removeEventListener('deviceorientation', handleOrientation);
-    };
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -99,13 +84,9 @@ const TrackingUI = () => {
       }
     };
 
-    // Run the function immediately
     updateLocationAndDistance();
-
-    // Set up the interval
     const intervalId = setInterval(updateLocationAndDistance, 10000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
   }, [location]);
 
@@ -144,30 +125,28 @@ const TrackingUI = () => {
     <Box
       sx={{
         height: '100vh',
-        bgcolor: '#0a0b1c',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         color: 'white',
-        position: 'relative',
       }}
     >
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-      }}>
-        <h4 style={{marginLeft:"25px"}}>Hello Wasim</h4>
-        <Avatar style={{marginRight:"25px"}}  />
-
-      </div>
+      <AppBar position="static" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Typography variant="h6">Hello Wasim</Typography>
+          <Avatar />
+        </Toolbar>
+      </AppBar>
 
       <Box
         sx={{
+          flex: 1,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          height: 'calc(100vh - 64px)', // Adjust height to account for the Topbar
           p: 2,
+          textAlign: 'center',
         }}
       >
         {loading ? (
@@ -197,22 +176,29 @@ const TrackingUI = () => {
             </Box>
 
             <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-              <div style={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}} >
-                <div>{distance !== null ? `${distance} km` : 'Calculating Distance...'}</div>
-                <div style={{fontSize:'15px',color:'grey',marginTop:'10px'}}>from your partner</div>
-              </div>
+              {distance !== null ? `${distance} km` : 'Calculating Distance...'}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: '15px', color: 'grey', mt: 1 }}>
+              from your partner
             </Typography>
 
-            {error && <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>{window.location.reload()}</Typography>}
+            {error && (
+              <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
+                {error}
+              </Typography>
+            )}
 
             <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
               Beta 1.0
             </Typography>
-            <Button onClick={handleLogout}>LogOut</Button>
+            <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mt: 2 }}>
+              Log Out
+            </Button>
           </>
         )}
-        <BottomNavbar />
       </Box>
+      
+      <BottomNavbar />
     </Box>
   );
 };
