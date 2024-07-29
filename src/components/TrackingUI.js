@@ -186,6 +186,7 @@ const TrackingUI = () => {
                 {error && (
                   <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
                     {error}
+                    {window.location.reload()}
                   </Typography>
                 )}
 
