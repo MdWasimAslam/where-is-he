@@ -61,7 +61,7 @@ const TrackingUI = () => {
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition(handleSuccess, handleError, {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 25000,
           maximumAge: 0,
         });
       } else {
