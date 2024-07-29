@@ -36,11 +36,29 @@ const AnimatedHeart = ({ distance }) => {
   );
 };
 
+const formatTimeDifference = (lastUpdated) => {
+  const now = new Date();
+  const updatedTime = new Date(lastUpdated);
+  const differenceInSeconds = Math.floor((now - updatedTime) / 1000);
+
+  if (differenceInSeconds < 60) {
+    return `${differenceInSeconds} seconds ago`;
+  } else if (differenceInSeconds < 3600) {
+    const minutes = Math.floor(differenceInSeconds / 60);
+    return `${minutes} minutes ago`;
+  } else {
+    const hours = Math.floor(differenceInSeconds / 3600);
+    return `${hours} hours ago`;
+  }
+};
+
 const TrackingUI = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
   const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null); // State to store last update time
+  const [timeSinceUpdate, setTimeSinceUpdate] = useState('');
   const [selectedNav, setSelectedNav] = useState(0); // State for tracking selected navigation item
 
   useEffect(() => {
@@ -88,6 +106,7 @@ const TrackingUI = () => {
 
       if (response.data && response.data.distance) {
         setDistance(response.data.distance);
+        setLastUpdated(response.data.lastUpdated);
       }
     } catch (error) {
       console.error(error);
@@ -107,6 +126,16 @@ const TrackingUI = () => {
 
     return () => clearInterval(intervalId);
   }, [location, updateUserLocation]);
+
+  useEffect(() => {
+    if (lastUpdated) {
+      const intervalId = setInterval(() => {
+        setTimeSinceUpdate(formatTimeDifference(lastUpdated));
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [lastUpdated]);
 
   const handleNavChange = (newValue) => {
     setSelectedNav(newValue);
@@ -193,6 +222,12 @@ const TrackingUI = () => {
                 <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
                   Loving you is like breathing; I can’t stop, and I don’t want to.
                 </Typography>
+
+                {lastUpdated && (
+                  <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
+                    Last updated: {timeSinceUpdate}
+                  </Typography>
+                )}
               </>
             )}
           </Box>) : selectedNav === 1 ? (
