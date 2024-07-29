@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Box, Button, Typography, CircularProgress, Avatar, AppBar, Toolbar } from '@mui/material';
+import { Box, Typography, CircularProgress, Avatar, AppBar, Toolbar } from '@mui/material';
 import GradientProgress from './GradientProgress';
-import { useAuth } from './AuthContext';
 import config from './Config';
 import { keyframes } from '@mui/system';
 import BottomNavbar from './BottomNavbar';
+import profileImage1 from '../Images/ProfileImg1.jpeg';
+import profileImage2 from '../Images/ProfileImg2.jpg';
 
 const pulse = keyframes`
   0% {
@@ -40,7 +41,7 @@ const TrackingUI = () => {
   const [error, setError] = useState(null);
   const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { logout } = useAuth();
+  const [selectedNav, setSelectedNav] = useState(0); // State for tracking selected navigation item
 
   useEffect(() => {
     const handleSuccess = (position) => {
@@ -60,7 +61,7 @@ const TrackingUI = () => {
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition(handleSuccess, handleError, {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 0,
         });
       } else {
@@ -76,21 +77,7 @@ const TrackingUI = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const updateLocationAndDistance = () => {
-      if (location.latitude && location.longitude) {
-        updateUserLocation();
-        getDistance();
-      }
-    };
-
-    updateLocationAndDistance();
-    const intervalId = setInterval(updateLocationAndDistance, 10000);
-
-    return () => clearInterval(intervalId);
-  }, [location]);
-
-  const updateUserLocation = async () => {
+  const updateUserLocation = useCallback(async () => {
     try {
       const response = await axios.post(`${config.api}/geo/locationUpdate`, {
         latitude: location.latitude,
@@ -103,9 +90,9 @@ const TrackingUI = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [location.latitude, location.longitude]);
 
-  const getDistance = async () => {
+  const getDistance = useCallback(async () => {
     try {
       const response = await axios.post(`${config.api}/geo/distance`, {
         coupleId: localStorage.getItem('coupleId'),
@@ -115,10 +102,24 @@ const TrackingUI = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
-  const handleLogout = async () => {
-    await logout();
+  useEffect(() => {
+    const updateLocationAndDistance = () => {
+      if (location.latitude && location.longitude) {
+        updateUserLocation();
+        getDistance();
+      }
+    };
+
+    updateLocationAndDistance();
+    const intervalId = setInterval(updateLocationAndDistance, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [location, updateUserLocation, getDistance]);
+
+  const handleNavChange = (newValue) => {
+    setSelectedNav(newValue);
   };
 
   return (
@@ -132,13 +133,21 @@ const TrackingUI = () => {
       }}
     >
       <AppBar position="static" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6">Hello Wasim</Typography>
-          <Avatar />
+        <Toolbar sx={{ justifyContent: 'space-between', minHeight: '80px', padding: '5px 25px' }}>
+          <Typography variant="h5" style={{ fontFamily: 'poppins' }}>
+            Hello {localStorage.getItem('username') === 'wasi' ? <>Wasi</> : <>Sheezu</>}
+          </Typography>
+          {localStorage.getItem('username') === 'wasi' ? (
+            <Avatar alt="Wasi" src={profileImage2} style={{ border: "1px solid white" }} />
+          ) : (
+            <Avatar alt="Sheezu" src={profileImage1} style={{ border: "1px solid white" }} />
+          )}
         </Toolbar>
       </AppBar>
 
-      <Box
+     {
+      selectedNav === 0 ? (
+        <Box
         sx={{
           flex: 1,
           display: 'flex',
@@ -189,16 +198,66 @@ const TrackingUI = () => {
             )}
 
             <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
-              Beta 1.0
+              Loving you is like breathing; I can’t stop, and I don’t want to.
             </Typography>
-            <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mt: 2 }}>
-              Log Out
-            </Button>
           </>
         )}
+      </Box>) : selectedNav === 1 ? (
+        <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2,
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+          Coming Soon 1...
+        </Typography>
       </Box>
-      
-      <BottomNavbar />
+      ) : selectedNav === 2 ? (
+        <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2,
+          textAlign: 'center',
+        }}
+
+      >
+        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+          Coming Soon 2...
+        </Typography>
+      </Box>
+
+      ) : (
+        <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2,
+          textAlign: 'center',
+        }}
+
+
+      >
+        <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+          Coming Soon...
+        </Typography>
+      </Box>
+      )
+     }
+        
+      <BottomNavbar selectedNav={selectedNav} onNavChange={handleNavChange} />
     </Box>
   );
 };

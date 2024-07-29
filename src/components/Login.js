@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, IconButton } from '@mui/material';
+import { Box, Typography, TextField, Button } from '@mui/material';
 // import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
@@ -18,9 +18,9 @@ const Login = () => {
   };
 
 
-  const SignUp = () => {
-    navigate('/signup');
-  }
+  // const SignUp = () => {
+  //   navigate('/signup');
+  // }
 
 
   React.useEffect(() => {

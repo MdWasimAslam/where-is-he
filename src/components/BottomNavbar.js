@@ -3,25 +3,33 @@ import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useAuth } from './AuthContext';
+import { Logout } from '@mui/icons-material';
 
-const BottomNavbar = () => {
-  const [value, setValue] = React.useState(0);
+const BottomNavbar = ({ selectedNav, onNavChange }) => {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <BottomNavigation
-      value={value}
+      value={selectedNav}
       onChange={(event, newValue) => {
-        setValue(newValue);
+        onNavChange(newValue);
       }}
       showLabels
       sx={{
         position: 'fixed',
         bottom: 0,
         width: '100%',
-        bgcolor: '#0a0b1c',
+        height: 60, // Increased height
+        bgcolor: 'transparent', // Make background transparent for gradient
+        background: 'linear-gradient(180deg, rgba(10,11,28,1) 0%, rgba(0,0,0,1) 100%)', // Gradient background
         boxShadow: '0 -2px 10px rgb(0 0 0 / 69%)',
         '& .Mui-selected': {
-          color: '#ff4081', // Highlight color for the selected item
+          color: '#F15F79', // Highlight color for the selected item
         },
       }}
     >
@@ -30,7 +38,7 @@ const BottomNavbar = () => {
         sx={{
           color: 'white',
           '&.Mui-selected': {
-            color: '#34aadc', // Highlight color for the selected item
+            color: '#F15F79', // Highlight color for the selected item
           },
         }}
       />
@@ -39,7 +47,7 @@ const BottomNavbar = () => {
         sx={{
           color: 'white',
           '&.Mui-selected': {
-            color: '#34aadc', // Highlight color for the selected item
+            color: '#F15F79', // Highlight color for the selected item
           },
         }}
       />
@@ -48,11 +56,20 @@ const BottomNavbar = () => {
         sx={{
           color: 'white',
           '&.Mui-selected': {
-            color: '#34aadc', // Highlight color for the selected item
+            color: '#F15F79', // Highlight color for the selected item
           },
         }}
       />
-      
+      <BottomNavigationAction
+        icon={<Logout sx={{ fontSize: 30 }} />} // Increase icon size here
+        sx={{
+          color: 'white',
+          '&.Mui-selected': {
+            color: '#F15F79', // Highlight color for the selected item
+          },
+        }}
+        onClick={handleLogout}
+      />
     </BottomNavigation>
   );
 };
