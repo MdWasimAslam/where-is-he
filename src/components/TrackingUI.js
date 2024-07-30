@@ -202,7 +202,7 @@ const TrackingUI = () => {
 
                 {lastUpdated && (
                   <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
-                    Last updated: {timeSinceUpdate}
+                    Last Active: {timeSinceUpdate}
                   </Typography>
                 )}
               </>
