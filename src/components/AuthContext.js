@@ -1,19 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';  // Note: Correct import
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import config from './Config';
-
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(localStorage.getItem('auth') === 'true');
+  const [loading, setLoading] = useState(false);
   
-
   const login = async (payload) => {
     try {
+      setLoading(true);
       const response = await axios.post(`${config.api}/users/login`, payload);
       if (response.status === 200) {
         setAuth(true);
@@ -23,12 +23,17 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('userId', response.data.userId);
         localStorage.setItem('username', response.data.username);
         localStorage.setItem('coupleId', response.data.coupleId);
+        setLoading(false);
       } else {
         setAuth(false);
+        setLoading(false);
         toast.error('Invalid credentials');
+        return response.data;
       }
     } catch (error) {
+      setLoading(false);
       console.error('Login error:', error);
+      toast.error('Invalid credentials');
       setAuth(false);
     }
   };
@@ -37,12 +42,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${config.api}/users/register`, payload);
       if (response.status === 200) {
-       toast.success('User created successfully');
+        toast.success('User created successfully');
       } else {
         setAuth(false);
+        toast.error('User creation failed');
       }
     } catch (error) {
-      alert('User already exists');
+      toast.error('User already exists');
     }
   };
 
@@ -69,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout, signup }}>
+    <AuthContext.Provider value={{ auth, login, logout, signup,loading }}>
       {children}
       <ToastContainer />
     </AuthContext.Provider>
