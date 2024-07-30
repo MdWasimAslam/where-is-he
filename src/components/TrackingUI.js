@@ -208,10 +208,11 @@ const TrackingUI = () => {
                 {error && (
                   <Typography variant="body2" sx={{ mt: 2, color: '#ff0000' }}>
                     {error}
-                    <Button onClick={()=>{window.location.reload()}}>Reload</Button>
+                    <Button onClick={()=>{window.location.reload()}}
+                      style={{ color: 'white', backgroundColor: '#ff0000', marginTop: '10px' }}
+                      >Reload</Button>
                   </Typography>
                 )}
-
                 <Typography variant="body2" sx={{ mt: 2, color: '#757575' }}>
                   Loving you is like breathing; I can’t stop, and I don’t want to.
                 </Typography>
