@@ -118,6 +118,22 @@ const TrackingUI = () => {
     setSelectedNav(newValue);
   };
 
+  const getHeartLoaderClass = () => {
+    if (distance === null) return '';
+  
+    // Determine the animation class based on distance
+    if (distance < 1) {
+      return 'heart-loader fast';  // For distance less than 1 km
+    } else if (distance <= 3) {
+      return 'heart-loader medium';  // For distance between 1 km and 3 km
+    } else if (distance >= 5) {
+      return 'heart-loader slow';  // For distance greater than 5 km
+    } else {
+      return 'heart-loader medium';  // Default case for distances between 3 km and 5 km
+    }
+  };
+  
+
   return (
     <Box
       sx={{
@@ -178,7 +194,7 @@ const TrackingUI = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <div class="heart-loader"></div>
+                    <div className={getHeartLoaderClass()} ></div>
                   </Box>
                 </Box>
 

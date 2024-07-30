@@ -12,7 +12,16 @@
   background-repeat: no-repeat;
   position: relative;
 }
-.heart-loader:after {
+.fast:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 1;
+  animation: l3 0.5s infinite;
+}
+
+.medium:after {
   content: "";
   position: absolute;
   inset: 0;
@@ -20,6 +29,18 @@
   opacity: 1;
   animation: l3 1.5s infinite;
 }
+
+
+.slow:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 1;
+  animation: l3 3s infinite;
+}
+
+
 @keyframes l3 {
   to {transform:scale(2.2);opacity:0}
 }
