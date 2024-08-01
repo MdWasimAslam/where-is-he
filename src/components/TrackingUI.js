@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { Box, Typography, CircularProgress, Avatar, AppBar, Toolbar, Button } from '@mui/material';
 import GradientProgress from './GradientProgress';
@@ -8,10 +8,6 @@ import profileImage1 from '../Images/ProfileImg1.jpeg';
 import profileImage2 from '../Images/ProfileImg2.jpg';
 import "./Styles/TrackingUi.css";
 import Wishlist from './Wishlist';
-
-
-
-
 
 const formatTimeDifference = (lastUpdated) => {
   const now = new Date();
@@ -34,9 +30,11 @@ const TrackingUI = () => {
   const [error, setError] = useState(null);
   const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState(null); // State to store last update time
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [timeSinceUpdate, setTimeSinceUpdate] = useState('');
-  const [selectedNav, setSelectedNav] = useState(0); // State for tracking selected navigation item
+  const [selectedNav, setSelectedNav] = useState(0);
+  
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     const handleSuccess = (position) => {
@@ -52,23 +50,23 @@ const TrackingUI = () => {
       }
     };
 
-    const requestGeolocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(handleSuccess, handleError, {
-          enableHighAccuracy: true,
-          timeout: 10000, // 10 seconds
-          maximumAge: 0,
-        });
-      } else {
-        setError('Geolocation is not supported by this browser.');
-      }
-    };
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(handleSuccess, handleError, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      });
+    } else {
+      setError('Geolocation is not supported by this browser.');
+    }
 
-    requestGeolocation();
+    return () => {
+      // Cleanup code if needed
+    };
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000); // Simulate loading for 1 second
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -88,20 +86,24 @@ const TrackingUI = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [location.latitude, location.longitude]);
+  }, [location]);
 
   useEffect(() => {
-    const updateLocationAndDistance = () => {
-      if (location.latitude && location.longitude) {
-        updateUserLocation();
+    if (location.latitude && location.longitude) {
+      updateUserLocation();
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(updateUserLocation, 25000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
-
-    // Call immediately, then set up interval
-    updateLocationAndDistance();
-    const intervalId = setInterval(updateLocationAndDistance, 25000); // 25 seconds
-
-    return () => clearInterval(intervalId);
   }, [location, updateUserLocation]);
 
   useEffect(() => {
@@ -121,18 +123,16 @@ const TrackingUI = () => {
   const getHeartLoaderClass = () => {
     if (distance === null) return '';
   
-    // Determine the animation class based on distance
     if (distance < 1) {
-      return 'heart-loader fast';  // For distance less than 1 km
+      return 'heart-loader fast';
     } else if (distance <= 3) {
-      return 'heart-loader medium';  // For distance between 1 km and 3 km
+      return 'heart-loader medium';
     } else if (distance >= 5) {
-      return 'heart-loader slow';  // For distance greater than 5 km
+      return 'heart-loader slow';
     } else {
-      return 'heart-loader medium';  // Default case for distances between 3 km and 5 km
+      return 'heart-loader medium';
     }
   };
-  
 
   return (
     <Box
@@ -144,8 +144,6 @@ const TrackingUI = () => {
         color: 'white',
       }}
     >
-      {/* Topbar */}
-      
       <AppBar position="static" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
         <Toolbar sx={{ justifyContent: 'space-between', minHeight: '75px', padding: '5px 25px' }}>
           <Typography variant="h5" style={{ fontFamily: 'poppins' }}>
@@ -224,42 +222,8 @@ const TrackingUI = () => {
                 )}
               </>
             )}
-          </Box>) : selectedNav === 1 ? (
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                p: 2,
-                textAlign: 'center',
-              }}
-            >
-              {/* <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-                Coming Soon 1...
-              </Typography> */}
-              <Wishlist />
-            </Box>
-          ) : selectedNav === 2 ? (
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                p: 2,
-                textAlign: 'center',
-              }}
-
-            >
-              <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
-                Coming Soon 2...
-              </Typography>
-            </Box>
-
-          ) : (
+          </Box>
+        ) : selectedNav === 1 ? (
           <Box
             sx={{
               flex: 1,
@@ -270,8 +234,36 @@ const TrackingUI = () => {
               p: 2,
               textAlign: 'center',
             }}
-
-
+          >
+            <Wishlist />
+          </Box>
+        ) : selectedNav === 2 ? (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
+              Coming Soon 2...
+            </Typography>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2,
+              textAlign: 'center',
+            }}
           >
             <Typography variant="h5" sx={{ mb: 1, mt: 2 }}>
               Coming Soon...
