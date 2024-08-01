@@ -1,5 +1,5 @@
 body{
-  background: linear-gradient(to bottom, rgb(10, 5, 28), rgb(30, 25, 58), rgb(20, 0, 30));
+  background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
   overflow: hidden;
 }
 .App {

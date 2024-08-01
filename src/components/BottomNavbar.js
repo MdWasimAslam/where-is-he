@@ -1,10 +1,11 @@
 import React from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useAuth } from './AuthContext';
 import { Logout } from '@mui/icons-material';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+
 
 // Reusable styles for BottomNavigationAction
 const actionStyles = {
@@ -49,7 +50,7 @@ const BottomNavbar = ({ selectedNav, onNavChange }) => {
         sx={actionStyles}
       />
       <BottomNavigationAction
-        icon={<RestoreIcon sx={{ fontSize: 30 }} />} // Increase icon size here
+        icon={<LocalActivityIcon sx={{ fontSize: 30 }} />} // Increase icon size here
         sx={actionStyles}
       />
       <BottomNavigationAction

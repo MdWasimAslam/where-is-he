@@ -7,7 +7,7 @@ import BottomNavbar from './BottomNavbar';
 import profileImage1 from '../Images/ProfileImg1.jpeg';
 import profileImage2 from '../Images/ProfileImg2.jpg';
 import "./Styles/TrackingUi.css";
-import Wishlist from './Wishlist';
+import Activity from './Activity.js';
 
 const formatTimeDifference = (lastUpdated) => {
   const now = new Date();
@@ -235,7 +235,7 @@ const TrackingUI = () => {
               textAlign: 'center',
             }}
           >
-            <Wishlist />
+            <Activity />
           </Box>
         ) : selectedNav === 2 ? (
           <Box
