@@ -8,7 +8,8 @@
   .card-container {
     display: flex;
     margin-bottom: 1rem;
-    width: 100%;
+    width: 90vw;
+    
   }
   
   .rank-card {
@@ -54,3 +55,10 @@
     height: 40px;
   }
   
+
+  .activity-grid-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }

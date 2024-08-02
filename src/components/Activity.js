@@ -6,10 +6,23 @@ import './Styles/Activity.css';
 
 const Activity = () => {
   return (
-    <Box className="wishlist-container">
-      <Box className="card-container">
-        <Card className="rank-card">
-          <div className="rank-section">
+    <div>
+      <RankCard/>
+      <ActivityOptions/>
+    </div>
+  )
+}
+
+export default Activity
+
+
+
+export const RankCard = () => {
+  return (
+    <div>
+           <Box className="card-container">
+         <Card className="rank-card">
+           <div className="rank-section">
             <img src={trophy} alt="trophy" className="icon" />
             <div className="text-section">
               <Typography variant="p" className="label">Rank</Typography>
@@ -17,18 +30,27 @@ const Activity = () => {
             </div>
           </div>
           <hr className="divider"/>
-          <div className="points-section">
-            <img src={coin} alt="coin" className="icon" />
-            <div className="text-section">
-              <Typography variant="p" className="label">Points</Typography>
-              <Typography variant="h6" className="value">348</Typography>
-            </div>
-          </div>
-        </Card>
-      </Box>
-      <Grid container spacing={2}></Grid>
-    </Box>
-  );
-};
+           <div className="points-section">
+             <img src={coin} alt="coin" className="icon" />
+             <div className="text-section">
+               <Typography variant="p" className="label">Points</Typography>
+               <Typography variant="h6" className="value">348</Typography>
+             </div>
+           </div>
+         </Card>
+       </Box>
+    </div>
+  )
+}
 
-export default Activity;
+
+
+export const ActivityOptions = () => {
+  return (
+    <div>
+      <div className='activity-grid-container'>
+        
+      </div>
+    </div>
+  )
+}
